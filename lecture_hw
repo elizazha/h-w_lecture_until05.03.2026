@@ -1,3 +1,5 @@
+//var Loop+Fake: закольцованный список с псевдоузлом
+
 #include <iostream>
   
 template <class T>
