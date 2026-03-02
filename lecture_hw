@@ -1,4 +1,139 @@
 #include <iostream>
 
+template <class T>
+struct BiList{
+    T val;
+    BiList<T>* next;
+    BiList<T>* prev;
+};
+
+//TASK 1
+//конструктор копирования
+//оператор присваивания
+//конструктор по умолчанию
+//деструктор
+
+//TASK 2
+template<class T>
+BiList<T>* createList();
+
+template<class T>
+void delete_list(BiList<T>* newList);
+
+template<class T>
+void clear(BiList<T>* newList) noexcept;
+
+template<class T>
+void add(BiList<T>* newList, const T& v);
+
+template<class T>
+void insert(BiList<T>* lastKnot, const T& v);
+
+template<class T>
+void cut(BiList<T>* fake) noexcept;
+
+template<class T>
+void erase(BiList<T>* fake,BiList<T>* knot) noexcept;
+
+template<class T, class Function>
+void traverse(BiList<T>* fake, Function f);
+
+//TASK 3
+
+template<class T>
+BiList<T>* createList()//create new list
+{
+    BiList<T>* newList = new BiList<T>{T(), nullptr, nullptr};
+    newList-> next = newList -> prev = newList;
+    return newList;
+}
+template<class T>
+void delete_list(BiList<T>* newList)//delete list
+{
+    if (newList)
+    {
+        clear(newList);
+        delete newList;
+    }
+}
+
+template<class T>
+void clear(BiList<T>* newList)//clear list that we have, fake knot DOESNT delete
+{
+    if(newList)
+    {
+        BiList<T>* currentElement = newList -> next;
+        while(currentElement != newList)
+        {
+            BiList<T>* nextElement = currentElement -> next;
+            delete currentElement;
+            currentElement = nextElement;
+        }
+        newList -> next = newList;
+        newList -> prev = newList;
+    }
+}
+
+template<class T>
+void add(BiList<T>* newList, const T& v)//add knot in the begining
+{
+    BiList<T>* knot = new BiList<T>{v, newList->next, newList};
+    if(newList->next == newList && newList->prev == newList)
+    {
+        newList->next = knot;
+        newList->prev=knot;
+        knot -> next = newList;
+        knot -> prev = newList;
+    }else
+    {
+        newList->next->prev = knot;
+        newList->next = knot;
+    }
+}
+
+
+template<class T>
+void insert(BiList<T>* lastKnot, const T& v)//add knot in the end after pointed knot
+{
+    BiList<T>* newKnot = new BiList<T>{v, lastKnot->next, lastKnot};
+    lastKnot->next->prev = newKnot;
+    lastKnot->next = newKnot;
+}
+
+template<class T>
+void cut(BiList<T>* fake)//delete head(knot after fake; the first real knot)
+{
+   if(fake->next != fake)
+   {
+    BiList<T>* head = fake->next;
+    fake->next = head->next;
+    head->next->prev = fake;
+    delete head;
+   }
+}
+
+template<class T>
+void erase(BiList<T>* fake,BiList<T>* knot)//delete knot after pointed knot, but we check if the knot we want to delete DOESNT fake knot
+{
+    if(knot->next != fake){
+        BiList<T>* toDelete = knot->next;
+        knot->next = toDelete->next;
+        toDelete->next->prev = knot;
+        delete toDelete;
+    }
+}
+
+template<class T, class Function>
+void traverse(BiList<T>* fake, Function f)//go throught all list and make some function
+{
+    if (!fake) return;
+    BiList<T>* current = fake->next;
+    while (current != fake)
+    {
+        f(current->val);
+        current = current->next;
+    }
+}
+
 int main()
 {}
