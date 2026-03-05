@@ -14,7 +14,6 @@ struct BiList{
 //оператор присваивания
 //конструктор по умолчанию
 //деструктор
-
 //TASK 2
 template<class T>
 BiList<T>* createList();
